@@ -1,16 +1,16 @@
-import { Message } from '../model'
+import { Message, User } from '../model'
 
 export async function create( data: { to: string, from: string, data: string } ) {
-    const user = await Message.create(data)
-    return  user
+    const message = await Message.create(data)
+    return  message
 }
 
 export async function getAll() {
-    const users = await Message.find({})
-    return users
+    const messages = await Message.find({})
+    return messages
 }
 
 export async function getById(id: string) {
-    const user = await Message.findById(id)
-    return user
+    const message = await Message.findById(id)
+    return message
 }
