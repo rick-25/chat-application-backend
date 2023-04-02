@@ -8,6 +8,9 @@ import * as MessageRouter from './router/message';
 dotenv.config();
 
 const app: Express = express();
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json({}))
+
 const server = new http.Server(app)
 const port = process.env.PORT;
 

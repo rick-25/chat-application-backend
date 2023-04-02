@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config()
 
-const MONGO_URL = process.env.MONGO_URL || "mongodb+srv://aditya:123@cluster0.o7fng.mongodb.net/temp?retryWrites=true&w=majority"
+const MONGO_URL = "mongodb+srv://aditya:123@cluster0.o7fng.mongodb.net/temp?retryWrites=true&w=majority"
 
 mongoose.connect(MONGO_URL)
         .catch(err => console.log(err))
