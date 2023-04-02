@@ -4,17 +4,24 @@ import dotenv from 'dotenv';
 import { Server } from 'socket.io'
 import * as UserRouter from './router/user';
 import * as MessageRouter from './router/message';
+import cors from 'cors'
 
 dotenv.config();
 
 const app: Express = express();
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json({}))
+app.use(cors())
 
 const server = new http.Server(app)
 const port = process.env.PORT;
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: { 
+    origin: '*',
+    methods: ["GET", "POST"]
+  } 
+});
 io.on('connection', (client) => {
   console.log(`[${client.id}] connected!`);
 })
