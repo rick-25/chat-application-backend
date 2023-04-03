@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 import { Server } from 'socket.io'
 import * as UserRouter from './router/user';
 import * as MessageRouter from './router/message';
+import authRouter from './router/auth'
 import cors from 'cors'
+import { CustomRequst, authenticateToken } from './middlewares/auth';
 
 dotenv.config();
 
@@ -33,6 +35,12 @@ app.get('/', async (req: Request, res: Response) => {
 
 app.use(UserRouter.default)
 app.use(MessageRouter.default)
+app.use(authRouter)
+
+app.use(authenticateToken)
+app.get('/verify', (req, res) => {
+  res.send((req as CustomRequst).token)
+})
 
 server.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

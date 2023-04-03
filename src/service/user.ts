@@ -1,7 +1,6 @@
-import mongoose from 'mongoose'
 import { User } from '../model'
 
-export async function create( data: { name: string, email: string, password: string } ) {
+export async function create( data: { username: string, email: string, password: string } ) {
     const user = await User.create(data)
     return  user
 }

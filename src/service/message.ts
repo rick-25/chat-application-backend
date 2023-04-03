@@ -1,4 +1,4 @@
-import { Message, User } from '../model'
+import { Message } from '../model'
 
 export async function create( data: { to: string, from: string, data: string } ) {
     const message = await Message.create(data)
