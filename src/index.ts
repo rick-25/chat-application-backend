@@ -1,12 +1,12 @@
 import express, { Express, Request, Response } from 'express';
 import * as http from 'http'
-import dotenv from 'dotenv';
-import { Server } from 'socket.io'
+import dotenv from 'dotenv'
 import * as UserRouter from './router/user';
 import * as MessageRouter from './router/message';
 import authRouter from './router/auth'
 import cors from 'cors'
 import { CustomRequst, authenticateToken } from './middlewares/auth';
+import initSocketIO from './socketIO';
 
 dotenv.config();
 
@@ -18,16 +18,7 @@ app.use(cors())
 const server = new http.Server(app)
 const port = process.env.PORT;
 
-const io = new Server(server, {
-  cors: { 
-    origin: '*',
-    methods: ["GET", "POST"]
-  } 
-});
-io.on('connection', (client) => {
-  console.log(`[${client.id}] connected!`);
-})
-// io.listen(3000);
+initSocketIO(server)
 
 app.get('/', async (req: Request, res: Response) => {
   res.send('Express + Typescript')
