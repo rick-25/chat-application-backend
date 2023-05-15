@@ -30,18 +30,20 @@ export default function initSocketIO(server: http.Server<typeof http.IncomingMes
   });
   io.on('connection', async (client) => {
     const socket_ids = await getSocketIds();
-    console.log('connected:', client.data.email)
-    socket_map[client.data.email] = client
+    const client_email = client.data.email
 
-    client.emit('peers', JSON.stringify(socket_ids.filter(id => id !== client.id)))
-    client.broadcast.emit('peers', JSON.stringify(socket_ids))
+    socket_map[client_email] = client
+
+    client.emit('peers', JSON.stringify(Object.keys(socket_map).filter(id => id !== client_email)))
+    client.broadcast.emit('peers', JSON.stringify(Object.keys(socket_map)))
     
     client.on('msg', (payload: { to: string, data: string }) => {
-      client.broadcast.to(payload.to).emit('msg', { from: client.id, data: payload.data})
+      client.broadcast.to(socket_map[payload.to].id).emit('msg', { from: client_email, data: payload.data})
     })
 
     client.on('disconnect', async () => {
-      client.broadcast.emit('peers', JSON.stringify(await getSocketIds()))
+      delete socket_map[client_email]
+      client.broadcast.emit('peers', JSON.stringify(Object.keys(socket_map)))
     })
   })
 
