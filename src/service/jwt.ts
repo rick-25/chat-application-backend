@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = 'lund'
+const JWT_SECRET = 'secret'
 
 interface PayloadI {
     email: string
