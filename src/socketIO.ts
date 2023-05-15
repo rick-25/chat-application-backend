@@ -34,16 +34,25 @@ export default function initSocketIO(server: http.Server<typeof http.IncomingMes
 
     socket_map[client_email] = client
 
-    client.emit('peers', JSON.stringify(Object.keys(socket_map).filter(id => id !== client_email)))
-    client.broadcast.emit('peers', JSON.stringify(Object.keys(socket_map)))
+    client
+    .emit('peers', JSON.stringify(Object.keys(socket_map).filter(id => id !== client_email)))
+
+    client
+    .broadcast
+    .emit('peers', JSON.stringify(Object.keys(socket_map)))
     
     client.on('msg', (payload: { to: string, data: string }) => {
-      client.broadcast.to(socket_map[payload.to].id).emit('msg', { from: client_email, data: payload.data})
+      client
+      .broadcast
+      .to(socket_map[payload.to].id)
+      .emit('msg', { to: payload.to, from: client_email, data: payload.data})
     })
 
     client.on('disconnect', async () => {
       delete socket_map[client_email]
-      client.broadcast.emit('peers', JSON.stringify(Object.keys(socket_map)))
+      client
+      .broadcast
+      .emit('peers', JSON.stringify(Object.keys(socket_map)))
     })
   })
 
