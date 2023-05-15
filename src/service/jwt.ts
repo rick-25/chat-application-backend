@@ -11,5 +11,5 @@ export function generateToken(payload: PayloadI) {
 }
 
 export function verifyToken(token: string) {
-    return jwt.verify(token, JWT_SECRET)
+    return (jwt.verify(token, JWT_SECRET) as PayloadI)
 }
