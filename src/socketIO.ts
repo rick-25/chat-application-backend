@@ -44,10 +44,12 @@ export default function initSocketIO(server: http.Server<typeof http.IncomingMes
     client.on('msg', async (payload: { to: string, data: string }) => {
         try {
             await create({ ...payload, from: client_email })
-            client
-            .broadcast
-            .to(socket_map[payload.to].id)
-            .emit('msg', { ...payload, from: client_email })
+            if(Object.keys(socket_map).includes(payload.to)) {
+                client
+                .broadcast
+                .to(socket_map[payload.to].id)
+                .emit('msg', { ...payload, from: client_email })
+            }
         } catch (error) {
             console.log('msg event error: ', error);
         }
