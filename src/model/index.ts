@@ -14,7 +14,6 @@ mongoose.connection
 const userSchema = new mongoose.Schema({
     email: 'string',
     password: 'string',
-    username: 'string'
 })
 
 const messageSchema = new mongoose.Schema({
