@@ -5,8 +5,13 @@ export async function create( data: { to: string, from: string, data: string } )
     return  message
 }
 
-export async function getAll() {
-    const messages = await Message.find({})
+export async function getAll(email: string | undefined) {
+    let messages;
+    if(email) {
+        messages = await Message.find({ $or: [{ to: email }, { from: email }]})
+    } else {
+        messages = await Message.find({})
+    }
     return messages
 }
 

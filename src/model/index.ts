@@ -19,14 +19,8 @@ const userSchema = new mongoose.Schema({
 
 const messageSchema = new mongoose.Schema({
     data: 'string',
-    to: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User'
-    },
-    from: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User'
-    },
+    to: 'string',
+    from: 'string',
 })
 
 export const User = mongoose.model('User', userSchema)

@@ -25,12 +25,13 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use(UserRouter.default)
-app.use(MessageRouter.default)
 app.use(authRouter)
 
 app.use(authenticateToken)
+app.use(MessageRouter.default)
+
 app.get('/verify', (req, res) => {
-  res.send((req as CustomRequst).token)
+  res.send((req as CustomRequst).email)
 })
 
 server.listen(port, () => {

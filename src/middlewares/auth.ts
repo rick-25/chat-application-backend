@@ -3,7 +3,7 @@ import { verifyToken } from "../service/jwt"
 import { JsonWebTokenError, Jwt, JwtPayload } from "jsonwebtoken"
 
 export interface CustomRequst extends Request {
-    token: string |  JwtPayload
+    email: string
 }
 
 export async function authenticateToken(req: Request, res: Response, nxt: NextFunction) {
@@ -18,7 +18,7 @@ export async function authenticateToken(req: Request, res: Response, nxt: NextFu
             return res.sendStatus(403)
         }
 
-        (req as CustomRequst).token = payload
+        (req as CustomRequst).email = payload.email
 
         nxt();
     } catch (error) {

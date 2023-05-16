@@ -1,6 +1,7 @@
 import http from 'http'
 import { Server, Socket } from 'socket.io'
 import { verifyToken } from './service/jwt';
+import { create } from './service/message';
 
 const socket_map: any = {}
 
@@ -29,7 +30,6 @@ export default function initSocketIO(server: http.Server<typeof http.IncomingMes
     }
   });
   io.on('connection', async (client) => {
-    const socket_ids = await getSocketIds();
     const client_email = client.data.email
 
     socket_map[client_email] = client
@@ -41,11 +41,16 @@ export default function initSocketIO(server: http.Server<typeof http.IncomingMes
     .broadcast
     .emit('peers', JSON.stringify(Object.keys(socket_map)))
     
-    client.on('msg', (payload: { to: string, data: string }) => {
-      client
-      .broadcast
-      .to(socket_map[payload.to].id)
-      .emit('msg', { to: payload.to, from: client_email, data: payload.data})
+    client.on('msg', async (payload: { to: string, data: string }) => {
+        try {
+            await create({ ...payload, from: client_email })
+            client
+            .broadcast
+            .to(socket_map[payload.to].id)
+            .emit('msg', { ...payload, from: client_email })
+        } catch (error) {
+            console.log('msg event error: ', error);
+        }
     })
 
     client.on('disconnect', async () => {
